@@ -1,0 +1,38 @@
+@inject Plantilla_Base.Business.Interfaces.SistemaConfig.ISistemaConfig SistemaConfigService
+
+@{
+    var autenticado = User.Identity?.IsAuthenticated == true;
+    var sistemaConfig = await SistemaConfigService.F_GetSistemaVisualConfig();
+    var logoSistema = Url.Content(sistemaConfig.LogoUrl);
+}
+
+<nav class="public-home-nav public-page-nav" aria-label="Menu principal publico">
+    <a class="public-home-brand" asp-controller="Home" asp-action="VwIndex">
+        <img src="@logoSistema" alt="Logo Plantilla Base" />
+        <span>Plantilla Base</span>
+    </a>
+
+    <div class="public-home-menu">
+        <a asp-controller="Home" asp-action="VwIndex">Inicio</a>
+        <a asp-controller="Home" asp-action="VwAcercaNosotros">Acerca de nosotros</a>
+        <a asp-controller="Home" asp-action="VwNoticias">Noticias</a>
+        <a asp-controller="Home" asp-action="VwPublicaciones">Publicaciones</a>
+        <a asp-controller="Home" asp-action="VwContacto">Contacto</a>
+        <a asp-controller="Home" asp-action="VwPrivacy">Politicas de privacidad</a>
+    </div>
+
+    <div class="public-home-actions">
+        @if (autenticado)
+        {
+            <a class="btn btn-primary" asp-controller="Usuarios" asp-action="VwUsuarios">
+                <i class="fa-solid fa-gauge-high me-2"></i> Registrar Usuario
+            </a>
+        }
+        else
+        {
+            <a class="btn btn-outline-light" asp-controller="Account" asp-action="Login">
+                <i class="fa-solid fa-right-to-bracket me-2"></i> Login
+            </a>
+        }
+    </div>
+</nav>

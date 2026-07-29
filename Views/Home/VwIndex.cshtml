@@ -1,0 +1,216 @@
+@model Plantilla_Base.Models.Dto.Administracion.InicioAdmin.DtoInicioPublico
+@inject Plantilla_Base.Business.Interfaces.SistemaConfig.ISistemaConfig SistemaConfigService
+
+@{
+    // Inicio publico del sistema. Si el usuario esta autenticado, el layout
+    // tambien muestra el menu dinamico; si no, solo se ve esta pagina publica.
+    ViewData["Title"] = "Inicio";
+    var autenticado = User.Identity?.IsAuthenticated == true;
+    var slider = Model?.Slider ?? new List<Plantilla_Base.Models.Dto.Administracion.InicioAdmin.DtoInicioContenidoItem>();
+    var noticias = Model?.Noticias ?? new List<Plantilla_Base.Models.Dto.Administracion.InicioAdmin.DtoInicioContenidoItem>();
+    var publicaciones = Model?.Publicaciones ?? new List<Plantilla_Base.Models.Dto.Administracion.InicioAdmin.DtoInicioContenidoItem>();
+    var sistemaConfig = await SistemaConfigService.F_GetSistemaVisualConfig();
+    var logoSistema = Url.Content(sistemaConfig.LogoUrl);
+}
+
+<section class="public-home" id="inicio">
+    <nav class="public-home-nav" aria-label="Menu principal publico">
+        <a class="public-home-brand" asp-controller="Home" asp-action="VwIndex">
+            <img src="@logoSistema" alt="Logo Plantilla Base" />
+            <span>Plantilla Base</span>
+        </a>
+
+        <div class="public-home-menu">
+            <a href="#inicio">Inicio</a>
+            <a asp-controller="Home" asp-action="VwAcercaNosotros">Acerca de nosotros</a>
+            <a asp-controller="Home" asp-action="VwNoticias">Noticias</a>
+            <a asp-controller="Home" asp-action="VwPublicaciones">Publicaciones</a>
+            <a asp-controller="Home" asp-action="VwContacto">Contacto</a>
+            <a asp-controller="Home" asp-action="VwPrivacy">Politicas de privacidad</a>
+        </div>
+
+        <div class="public-home-actions">
+            @if (autenticado)
+            {
+                <a class="btn btn-primary" asp-controller="Usuarios" asp-action="VwUsuarios">
+                    <i class="fa-solid fa-gauge-high me-2"></i> Registrar Usuario
+                </a>
+            }
+            else
+            {
+                <a class="btn btn-outline-light" asp-controller="Account" asp-action="Login">
+                    <i class="fa-solid fa-right-to-bracket me-2"></i> Login
+                </a>
+            }
+        </div>
+    </nav>
+
+    @* Carrusel informativo publico. Para agregar imagenes, copia un .carousel-item y cambia background-image. *@
+    <div id="publicHomeCarousel" class="carousel slide public-home-carousel" data-bs-ride="carousel">
+        <div class="carousel-indicators">
+            @if (slider.Any())
+            {
+                @for (var i = 0; i < slider.Count; i++)
+                {
+                    <button type="button" data-bs-target="#publicHomeCarousel" data-bs-slide-to="@i" class="@(i == 0 ? "active" : "")" aria-current="@(i == 0 ? "true" : null)" aria-label="Slide @(i + 1)"></button>
+                }
+            }
+            else
+            {
+                <button type="button" data-bs-target="#publicHomeCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Informacion principal"></button>
+            }
+        </div>
+
+        <div class="carousel-inner">
+            @if (slider.Any())
+            {
+                @for (var i = 0; i < slider.Count; i++)
+                {
+                    var item = slider[i];
+                    var imagen = string.IsNullOrWhiteSpace(item.ImagenUrl) ? Url.Content("~/img/auth-background.svg") : Url.Content(item.ImagenUrl);
+                    <div class="carousel-item @(i == 0 ? "active" : "")">
+                        <div class="public-carousel-slide" style="background-image: linear-gradient(90deg, rgba(7, 18, 33, 0.88), rgba(7, 18, 33, 0.36)), url('@imagen');">
+                            <div class="public-carousel-copy">
+                                <span class="public-home-kicker">@item.TipoContenido</span>
+                                <h1>@item.Titulo</h1>
+                                <p>@(item.Resumen ?? item.Contenido)</p>
+                                @if (!string.IsNullOrWhiteSpace(item.EnlaceUrl))
+                                {
+                                    <a class="btn btn-outline-light mt-3" href="@item.EnlaceUrl">@(item.TextoBoton ?? "Ver mas")</a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+                <div class="carousel-item active">
+                    <div class="public-carousel-slide" style="background-image: linear-gradient(90deg, rgba(7, 18, 33, 0.88), rgba(7, 18, 33, 0.36)), url('@Url.Content("~/img/auth-background.svg")');">
+                        <div class="public-carousel-copy">
+                            <span class="public-home-kicker">Portal publico</span>
+                            <h1>Inicio</h1>
+                            <p>Consulta noticias, publicaciones y comunicados del administrador desde un punto central de acceso.</p>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <button class="carousel-control-prev" type="button" data-bs-target="#publicHomeCarousel" data-bs-slide="prev">
+            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Anterior</span>
+        </button>
+        <button class="carousel-control-next" type="button" data-bs-target="#publicHomeCarousel" data-bs-slide="next">
+            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+            <span class="visually-hidden">Siguiente</span>
+        </button>
+    </div>
+
+    <div class="public-home-content">
+        <section class="public-home-section public-about-section" id="acerca">
+            <div class="section-title-row">
+                <h2>Acerca de nosotros</h2>
+                <span>Institucional</span>
+            </div>
+            <div class="public-feature-layout">
+                @if (!string.IsNullOrWhiteSpace(Model?.Acerca?.ImagenUrl))
+                {
+                    <img class="public-feature-image" src="@Url.Content(Model.Acerca.ImagenUrl)" alt="@Model.Acerca.Titulo" />
+                }
+                <div>
+                    @if (!string.IsNullOrWhiteSpace(Model?.Acerca?.Titulo))
+                    {
+                        <h3>@Model.Acerca.Titulo</h3>
+                    }
+                    <p>
+                        @(Model?.Acerca?.Resumen ?? Model?.Acerca?.Contenido ?? "Este portal centraliza informacion publica y sirve como puerta de entrada a los modulos internos del sistema. La administracion puede publicar novedades, documentos y avisos relevantes para los usuarios.")
+                    </p>
+                    @if (Model?.Acerca != null)
+                    {
+                        <a class="public-inline-link" asp-controller="Home" asp-action="VwAcercaNosotros">Ver mas</a>
+                    }
+                </div>
+            </div>
+        </section>
+
+        <div class="public-home-grid">
+            <article class="public-home-section" id="noticias">
+                <div class="section-title-row">
+                    <h2>Noticias</h2>
+                    <span>Publico</span>
+                </div>
+
+                <div class="public-news-list">
+                    @if (noticias.Any())
+                    {
+                        @foreach (var item in noticias)
+                        {
+                            <article class="public-news-item">
+                                @if (!string.IsNullOrWhiteSpace(item.ImagenUrl))
+                                {
+                                    <img class="public-list-thumb" src="@Url.Content(item.ImagenUrl)" alt="@item.Titulo" />
+                                }
+                                <small>Noticia</small>
+                                <h3><a asp-controller="Home" asp-action="VwContenidoDetalle" asp-route-id="@item.Id_InicioContenido">@item.Titulo</a></h3>
+                                <p>@(item.Resumen ?? "")</p>
+                            </article>
+                        }
+                    }
+                    else
+                    {
+                        <article class="public-news-item">
+                            <small>Comunicado</small>
+                            <h3>Bienvenido a la plantilla base</h3>
+                            <p>Este espacio queda preparado para mostrar noticias publicadas por el administrador.</p>
+                        </article>
+                    }
+                </div>
+            </article>
+
+            <aside class="public-home-section" id="publicaciones">
+                <div class="section-title-row">
+                    <h2>Publicaciones</h2>
+                    <span>Admin</span>
+                </div>
+
+                <div class="public-publication-list">
+                    @if (publicaciones.Any())
+                    {
+                        @foreach (var item in publicaciones)
+                        {
+                            <a class="public-publication-link" asp-controller="Home" asp-action="VwContenidoDetalle" asp-route-id="@item.Id_InicioContenido">
+                                @if (!string.IsNullOrWhiteSpace(item.ImagenUrl))
+                                {
+                                    <img src="@Url.Content(item.ImagenUrl)" alt="@item.Titulo" />
+                                }
+                                else
+                                {
+                                    <i class="fa-solid fa-file-lines"></i>
+                                }
+                                <span>@item.Titulo</span>
+                            </a>
+                        }
+                    }
+                    else
+                    {
+                        <a href="#" aria-disabled="true">
+                            <i class="fa-solid fa-bullhorn"></i>
+                            <span>Publicaciones institucionales</span>
+                        </a>
+                    }
+                </div>
+            </aside>
+        </div>
+
+        <section class="public-home-section public-contact-section" id="contacto">
+            <div class="section-title-row">
+                <h2>Contacto</h2>
+                <span>Soporte</span>
+            </div>
+            <p>
+                @(Model?.Contacto?.Resumen ?? Model?.Contacto?.Contenido ?? "Para solicitar acceso, reportar novedades o pedir soporte, comunicate con el administrador del sistema. Los usuarios registrados recibiran sus credenciales iniciales por correo electronico.")
+            </p>
+        </section>
+    </div>
+</section>
