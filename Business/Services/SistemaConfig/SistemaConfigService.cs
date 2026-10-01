@@ -29,7 +29,7 @@ namespace Plantilla_Base.Business.Services.SistemaConfig
         {
             try
             {
-                var config = await _context.SistemaVisualConfig
+            var config = await _context.SistemaVisualConfig
                     .AsNoTracking()
                     .Where(c => c.Vigente == 1)
                     .OrderBy(c => c.Id_SistemaVisualConfig)
@@ -124,3 +124,5 @@ namespace Plantilla_Base.Business.Services.SistemaConfig
         }
     }
 }
+
+

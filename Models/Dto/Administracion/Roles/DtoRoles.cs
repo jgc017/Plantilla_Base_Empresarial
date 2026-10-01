@@ -22,5 +22,9 @@ namespace Plantilla_Base.Models.Dto.Administracion.Roles
         // Estado administrable desde el toggle de la vista Roles.
         [Range(0, 1)]
         public short Vigente { get; set; } = 1;
+
+        [Required(ErrorMessage = "El motivo de actualización es obligatorio")]
+        [StringLength(4000, MinimumLength = 10, ErrorMessage = "El motivo debe tener al menos 10 caracteres")]
+        public string Motivo_Actualiza { get; set; } = string.Empty;
     }
 }

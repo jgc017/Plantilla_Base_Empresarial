@@ -10,9 +10,10 @@ namespace Plantilla_Base.Business.Interfaces.InicioAdmin
         Task<ServiceResult> F_GetInicioContenidosList();
         Task<ServiceResult> F_GetInicioContenido(int idInicioContenido);
         Task<ServiceResult> P_UdpInicioContenido(int idInicioContenido, DtoInicioContenidoUpdateRequest model, AuditContext audit);
-        Task<ServiceResult> P_DeleteInicioContenido(int idInicioContenido, AuditContext audit);
+        Task<ServiceResult> P_DeleteInicioContenido(int idInicioContenido, string motivoElimina, AuditContext audit);
         Task<DtoInicioPublico> F_GetInicioPublico();
         Task<List<DtoInicioContenidoItem>> F_GetContenidoPublicoPorTipo(string tipoContenido);
         Task<DtoInicioContenidoItem?> F_GetContenidoPublicoDetalle(int idInicioContenido);
     }
 }
+

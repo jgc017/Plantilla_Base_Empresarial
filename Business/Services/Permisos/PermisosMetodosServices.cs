@@ -202,6 +202,7 @@ namespace Plantilla_Base.Business.Services.Permisos
 
             permiso.Descripcion = model.Descripcion?.Trim();
             permiso.Vigente = model.Vigente;
+            permiso.Motivo_Actualiza = model.Motivo_Actualiza;
             permiso.Id_Usuario_Modifica = audit.UserId;
             permiso.Fecha_Modifica = DateTime.UtcNow;
             permiso.Maquina_Modifica = audit.Machine;
@@ -215,8 +216,9 @@ namespace Plantilla_Base.Business.Services.Permisos
 
         // P_DeletePermisoMetodo: baja logica del permiso de metodo y de sus
         // asignaciones activas a roles.
-        public async Task<ServiceResult> P_DeletePermisoMetodo(int idPermiso, AuditContext audit)
+        public async Task<ServiceResult> P_DeletePermisoMetodo(int idPermiso, string motivoElimina, AuditContext audit)
         {
+            if (string.IsNullOrWhiteSpace(motivoElimina)) return ServiceResult.Fail(StatusCodes.Status400BadRequest, "El motivo de eliminación es obligatorio.");
             var permiso = await _context.Permisos
                 .FirstOrDefaultAsync(p => p.Id_Permiso == idPermiso && p.TipoPermiso == TipoPermisoMetodo);
 
@@ -227,6 +229,7 @@ namespace Plantilla_Base.Business.Services.Permisos
 
             var now = DateTime.UtcNow;
             permiso.Vigente = 0;
+            permiso.Motivo_Elimina = motivoElimina.Trim();
             permiso.Id_Usuario_Modifica = audit.UserId;
             permiso.Fecha_Modifica = now;
             permiso.Maquina_Modifica = audit.Machine;

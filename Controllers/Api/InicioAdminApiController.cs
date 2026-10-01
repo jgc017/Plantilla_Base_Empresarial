@@ -24,8 +24,8 @@ namespace Plantilla_Base.Controllers.Api
         };
 
         private const long ImagenMaximaBytes = 5 * 1024 * 1024;
-        private const int DominioTipoContenidoInicio = 13;
-        private const int TipoContenidoSlider = 14;
+        private const int DominioTipoContenidoInicio = 10;
+        private const int TipoContenidoSlider = 11;
         private const int SliderAnchoMinimo = 1440;
         private const int SliderAltoMinimo = 600;
         private const int ContenidoAnchoMinimo = 640;
@@ -111,14 +111,14 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/InicioAdminApi/P_DeleteInicioContenido/{id}
         [HttpDelete("P_DeleteInicioContenido/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeleteInicioContenido(int id)
+        public async Task<IActionResult> P_DeleteInicioContenido(int id, [FromQuery] string motivo)
         {
             if (!await TieneAccesoInicioAdmin())
             {
                 return Forbid();
             }
 
-            var result = await _inicioAdmin.P_DeleteInicioContenido(id, GetAuditContext());
+            var result = await _inicioAdmin.P_DeleteInicioContenido(id, motivo, GetAuditContext());
             await AuditarOperacion(result, "VwInicioAdmin", "P_DeleteInicioContenido");
             return ApiResponse(result);
         }
@@ -273,3 +273,4 @@ namespace Plantilla_Base.Controllers.Api
         }
     }
 }
+

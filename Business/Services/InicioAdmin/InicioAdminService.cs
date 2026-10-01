@@ -120,6 +120,7 @@ namespace Plantilla_Base.Business.Services.InicioAdmin
             contenido.MostrarEnInicio = model.MostrarEnInicio;
             contenido.Orden = model.Orden;
             contenido.Vigente = model.Vigente;
+            contenido.Motivo_Actualiza = model.Motivo_Actualiza;
             contenido.Id_Usuario_Modifica = audit.UserId;
             contenido.Fecha_Modifica = DateTime.UtcNow;
             contenido.Maquina_Modifica = audit.Machine;
@@ -133,8 +134,9 @@ namespace Plantilla_Base.Business.Services.InicioAdmin
         }
 
         // P_DeleteInicioContenido: realiza baja logica del contenido.
-        public async Task<ServiceResult> P_DeleteInicioContenido(int idInicioContenido, AuditContext audit)
+        public async Task<ServiceResult> P_DeleteInicioContenido(int idInicioContenido, string motivoElimina, AuditContext audit)
         {
+            if (string.IsNullOrWhiteSpace(motivoElimina)) return ServiceResult.Fail(StatusCodes.Status400BadRequest, "El motivo de eliminación es obligatorio.");
             var contenido = await _context.InicioContenidos.FindAsync(idInicioContenido);
             if (contenido == null)
             {
@@ -149,6 +151,7 @@ namespace Plantilla_Base.Business.Services.InicioAdmin
             }
 
             contenido.Vigente = 0;
+                contenido.Motivo_Elimina = motivoElimina.Trim();
             contenido.Id_Usuario_Modifica = audit.UserId;
             contenido.Fecha_Modifica = DateTime.UtcNow;
             contenido.Maquina_Modifica = audit.Machine;
@@ -389,3 +392,5 @@ namespace Plantilla_Base.Business.Services.InicioAdmin
         }
     }
 }
+
+

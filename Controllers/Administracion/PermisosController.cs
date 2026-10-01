@@ -12,8 +12,8 @@ namespace Plantilla_Base.Controllers.Administracion
     public class PermisosController : Controller
     {
         private readonly IGeneral _general;
-        private const int DominioPermisos = 6;
-        private const int AccionVer = 7;
+        private const int DominioPermisos = 3;
+        private const int AccionVer = 4;
 
         public PermisosController(IGeneral general)
         {

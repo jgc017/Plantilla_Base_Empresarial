@@ -69,7 +69,7 @@ function P_InsInicioContenido() {
 
     mostrarConfirmacion(
         "Registrar contenido?",
-        "El contenido podra mostrarse en la pagina inicio si así lo configuro.",
+        "El contenido podra mostrarse en la pagina inicio si asï¿½ lo configuro.",
         (confirmado) => {
             if (!confirmado) return;
 
@@ -185,11 +185,12 @@ function P_UdpInicioContenido() {
             if (!imagenLista) return null;
 
             payload.imagenUrl = valorCampo("ImagenInicioModal");
-            return secureFetch(`/api/InicioAdminApi/P_UdpInicioContenido/${idInicioContenido}`, {
-                method: "PUT",
+            return mostrarConfirmacionConMotivo("Confirmar actualizacion", "Indique el motivo de esta actualizacion (Min. 10 caracteres).", (confirmado, motivo) => {
+        if (!confirmado) return;
+        payload.Motivo_Actualiza = motivo;
+        secureFetch(`/api/InicioAdminApi/P_UdpInicioContenido/${idInicioContenido}`, { method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            });
+                body: JSON.stringify(payload) });
         })
         .then(response => response ? parseJsonResponse(response) : null)
         .then(data => {
@@ -210,13 +211,12 @@ function P_UdpInicioContenido() {
 function P_DeleteInicioContenido(idInicioContenido) {
     document.querySelectorAll(".table-menu").forEach(m => m.style.display = "none");
 
-    mostrarConfirmacion(
-        "Eliminar contenido?",
+    mostrarConfirmacionConMotivo("Eliminar contenido?",
         "Esta accion marcara el contenido como inactivo.",
-        (confirmado) => {
+        (confirmado, motivo) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/InicioAdminApi/P_DeleteInicioContenido/${idInicioContenido}`, { method: "DELETE" })
+            secureFetch(`/api/InicioAdminApi/P_DeleteInicioContenido/${idInicioContenido}` + "?motivo=" + encodeURIComponent(motivo), { method: "DELETE" })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;
@@ -231,6 +231,7 @@ function P_DeleteInicioContenido(idInicioContenido) {
                 .catch(() => mostrarAlerta("advertencia", "Error inesperado", "No se pudo eliminar el contenido."));
         }
     );
+    });
 }
 
 // P_UploadImagenInicio: sube una imagen al servidor y coloca su ruta publica en el formulario.

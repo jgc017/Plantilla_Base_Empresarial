@@ -25,5 +25,9 @@ namespace Plantilla_Base.Models.Dto.Administracion.SistemaConfig
         [Required(ErrorMessage = "La ruta del fondo del login es obligatoria.")]
         [StringLength(500, ErrorMessage = "La ruta del fondo del login no puede superar 500 caracteres.")]
         public string LoginBackgroundUrl { get; set; } = string.Empty;
+        [Required(ErrorMessage = "El motivo de actualización es obligatorio")]
+        [StringLength(4000, MinimumLength = 10, ErrorMessage = "El motivo debe tener al menos 10 caracteres")]
+        public string Motivo_Actualiza { get; set; } = string.Empty;
     }
 }
+

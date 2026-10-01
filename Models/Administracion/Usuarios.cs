@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plantilla_Base.Models.Administracion
@@ -45,6 +45,12 @@ namespace Plantilla_Base.Models.Administracion
         // Se activa para usuarios creados por administrador con clave temporal.
         public short Debe_Cambiar_Password { get; set; } = 0;
 
+        [StringLength(4000)]
+        public string? Motivo_Actualiza { get; set; }
+
+        [StringLength(4000)]
+        public string? Motivo_Elimina { get; set; }
+
         // Campos de auditoria de creacion.
         public int? Id_Usuario_Creacion { get; set; }
         public DateTime Fecha_Creacion { get; set; }
@@ -54,10 +60,6 @@ namespace Plantilla_Base.Models.Administracion
         public int? Id_Usuario_Modifica { get; set; }
         public DateTime? Fecha_Modifica { get; set; }
         public string? Maquina_Modifica { get; set; }
-
-        // Ultimo motivo administrativo usado para actualizar datos sensibles.
-        [StringLength(4000)]
-        public string? Motivo_Actualiza { get; set; }
     }
 
 }

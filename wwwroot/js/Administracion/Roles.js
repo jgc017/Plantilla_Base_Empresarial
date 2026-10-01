@@ -258,11 +258,12 @@ function P_UdpRol() {
         vigente: document.getElementById("chkRolVigente").checked ? 1 : 0
     };
 
-    secureFetch(`/api/RolesApi/P_UdpRol/${idRol}`, {
-        method: "PUT",
+    mostrarConfirmacionConMotivo("Confirmar actualizacion", "Indique el motivo de esta actualizacion (Min. 10 caracteres).", (confirmado, motivo) => {
+        if (!confirmado) return;
+        rolActualizado.Motivo_Actualiza = motivo;
+        secureFetch(`/api/RolesApi/P_UdpRol/${idRol}`, { method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(rolActualizado)
-    })
+        body: JSON.stringify(rolActualizado) })
         .then(parseJsonResponse)
         .then(data => {
             if (!data) return;
@@ -278,21 +279,19 @@ function P_UdpRol() {
         .catch(() => {
             mostrarAlerta("advertencia", "Error inesperado", "No se pudo guardar el rol.");
         });
+    });
 }
 
 // P_DeleteRol: confirma y ejecuta la baja logica de un rol.
 function P_DeleteRol(idRol) {
     document.querySelectorAll(".table-menu").forEach(m => m.style.display = "none");
 
-    mostrarConfirmacion(
-        "Eliminar rol?",
+    mostrarConfirmacionConMotivo("Eliminar rol?",
         "Esta accion marcara el rol como inactivo.",
-        (confirmado) => {
+        (confirmado, motivo) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/RolesApi/P_DeleteRol/${idRol}`, {
-                method: "DELETE"
-            })
+            secureFetch(`/api/RolesApi/P_DeleteRol/${idRol}` + "?motivo=" + encodeURIComponent(motivo), { method: "DELETE" })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;

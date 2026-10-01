@@ -336,11 +336,12 @@ function P_UdpDominio(idDominio, payload) {
         (confirmado) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/DominiosApi/P_UdpDominio/${idDominio}`, {
-                method: "PUT",
+            mostrarConfirmacionConMotivo("Confirmar actualizacion", "Indique el motivo de esta actualizacion (Min. 10 caracteres).", (confirmado, motivo) => {
+        if (!confirmado) return;
+        payload.Motivo_Actualiza = motivo;
+        secureFetch(`/api/DominiosApi/P_UdpDominio/${idDominio}`, { method: "PUT",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(payload)
-            })
+                body: JSON.stringify(payload) })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;
@@ -355,6 +356,7 @@ function P_UdpDominio(idDominio, payload) {
                 .catch(() => {
                     mostrarAlerta("advertencia", "Error inesperado", "No se pudo procesar la actualizacion.");
                 });
+    });
         }
     );
 }
@@ -378,15 +380,12 @@ function limpiarFormularioDominio() {
 function P_DeleteDominio(idDominio) {
     document.querySelectorAll(".table-menu").forEach(m => m.style.display = "none");
 
-    mostrarConfirmacion(
-        "Eliminar dominio?",
+    mostrarConfirmacionConMotivo("Eliminar dominio?",
         "Esta accion marcara el dominio como inactivo.",
-        (confirmado) => {
+        (confirmado, motivo) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/DominiosApi/P_DeleteDominio/${idDominio}`, {
-                method: "DELETE"
-            })
+            secureFetch(`/api/DominiosApi/P_DeleteDominio/${idDominio}` + "?motivo=" + encodeURIComponent(motivo), { method: "DELETE" })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;

@@ -152,6 +152,14 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<string>("Observacion")
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
@@ -205,6 +213,14 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<short>("MostrarEnInicio")
                         .HasColumnType("smallint");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<int>("Orden")
                         .HasColumnType("integer");
@@ -278,6 +294,14 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<int>("Posicion")
                         .HasColumnType("integer");
@@ -361,6 +385,14 @@ namespace Plantilla_Base.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<string>("TipoPermiso")
                         .IsRequired()
                         .ValueGeneratedOnAdd()
@@ -381,7 +413,7 @@ namespace Plantilla_Base.Migrations
 
                     b.HasIndex("TipoPermiso", "Id_Menu", "Accion")
                         .IsUnique()
-                        .HasFilter("\"Id_Menu\" IS NOT NULL");
+                        .HasFilter("\"Id_Menu\" IS NOT NULL AND \"TipoPermiso\" = 'Menu'");
 
                     b.ToTable("Permisos");
                 });
@@ -411,6 +443,14 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<string>("Rol")
                         .IsRequired()
@@ -460,6 +500,14 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<short>("Vigente")
                         .HasColumnType("smallint");
 
@@ -504,6 +552,14 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<short>("Vigente")
                         .HasColumnType("smallint");
@@ -558,6 +614,14 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<short>("Vigente")
                         .HasColumnType("smallint");
@@ -678,6 +742,10 @@ namespace Plantilla_Base.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
                         .HasMaxLength(4000)
                         .HasColumnType("character varying(4000)");
 

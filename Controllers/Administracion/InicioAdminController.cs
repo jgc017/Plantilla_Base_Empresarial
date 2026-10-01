@@ -11,7 +11,7 @@ namespace Plantilla_Base.Controllers.Administracion
     [Authorize]
     public class InicioAdminController : Controller
     {
-        private const int DominioTipoContenidoInicio = 13;
+        private const int DominioTipoContenidoInicio = 10;
         private readonly IGeneral _general;
 
         public InicioAdminController(IGeneral general)

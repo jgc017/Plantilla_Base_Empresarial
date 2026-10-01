@@ -10,6 +10,7 @@ namespace Plantilla_Base.Business.Interfaces.Permisos
         Task<ServiceResult> F_GetPermisoMetodo(int idPermiso);
         Task<ServiceResult> P_SyncPermisosMetodos(AuditContext audit);
         Task<ServiceResult> P_UdpPermisoMetodo(int idPermiso, DtoPermisoMetodoUpdateRequest model, AuditContext audit);
-        Task<ServiceResult> P_DeletePermisoMetodo(int idPermiso, AuditContext audit);
+        Task<ServiceResult> P_DeletePermisoMetodo(int idPermiso, string motivoElimina, AuditContext audit);
     }
 }
+

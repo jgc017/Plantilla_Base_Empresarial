@@ -162,6 +162,14 @@ builder.Services.AddRateLimiter(options =>
 // Construye la aplicacion con todos los servicios registrados.
 var app = builder.Build();
 
+// Ejecuta migraciones al iniciar para que la base de datos siempre tenga
+// las tablas y columnas necesarias sin necesidad de correr comandos.
+using (var scope = app.Services.CreateScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    await dbContext.Database.MigrateAsync();
+}
+
 // -----------------------------
 // Middleware
 // -----------------------------

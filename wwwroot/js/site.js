@@ -1,5 +1,5 @@
-ï»¿/*======================================================
-=                 1. SUBMENÃš LATERAL                   =
+/*======================================================
+=                 1. SUBMENÚ LATERAL                   =
 ======================================================*/
 
 let solicitudesCargaActivas = 0;
@@ -444,7 +444,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /*======================================================
-=           4. MOSTRAR / OCULTAR CONTRASEÃ‘A            =
+=           4. MOSTRAR / OCULTAR CONTRASEÑA            =
 ======================================================*/
 
 document.querySelectorAll(".toggle-password").forEach(icon => {
@@ -464,7 +464,7 @@ document.querySelectorAll(".toggle-password").forEach(icon => {
 });
 
 /*======================================================
-=               5. VALIDACIÃ“N DE FORMULARIOS           =
+=               5. VALIDACIÓN DE FORMULARIOS           =
 ======================================================*/
 
 function mostrarError(inputId, mensaje) {
@@ -504,7 +504,7 @@ document.querySelectorAll("input").forEach(input => {
 });
 
 /*======================================================
-=     6. MENÃš DE OPCIONES (HAMBURGUESA EN TABLAS)      =
+=     6. MENÚ DE OPCIONES (HAMBURGUESA EN TABLAS)      =
 ======================================================*/
 
 document.addEventListener("click", function (e) {
@@ -515,7 +515,7 @@ document.addEventListener("click", function (e) {
     // 2. Ignorar clics dentro del CONTENIDO del modal (pero NO los botones)
     if (e.target.closest("#modalEditar .modal-content-custom")) return;
 
-    // 3. BotÃ³n hamburguesa
+    // 3. Botón hamburguesa
     const btn = e.target.closest(".action-menu");
     if (btn) {
 
@@ -530,7 +530,7 @@ document.addEventListener("click", function (e) {
         return;
     }
 
-    // 4. Cerrar menÃºs si clic fuera
+    // 4. Cerrar menús si clic fuera
     if (!e.target.closest(".dropdown-menu-custom")) {
         document.querySelectorAll(".dropdown-menu-custom").forEach(m => m.style.display = "none");
     }
@@ -570,15 +570,15 @@ function mostrarAlerta(tipo, titulo, mensaje) {
 }
 
 /*======================================================
-=               8. CONFIRMACIÃ“N (MODAL)                =
+=               8. CONFIRMACIÓN (MODAL)                =
 ======================================================*/
 
 function mostrarConfirmacion(titulo, mensaje, callback) {
-
-    // Modal global definido en _Layout.cshtml para decisiones Si/No.
     const modal = document.getElementById("confirmacionSistema");
     const tituloEl = document.getElementById("confirmacionTitulo");
     const mensajeEl = document.getElementById("confirmacionMensaje");
+    const motivoContainer = document.getElementById("confirmacionMotivoContainer");
+    if(motivoContainer) motivoContainer.style.display = "none";
 
     tituloEl.textContent = titulo;
     mensajeEl.textContent = mensaje;
@@ -595,5 +595,52 @@ function mostrarConfirmacion(titulo, mensaje, callback) {
     document.getElementById("btnCancelar").onclick = () => {
         modal.style.display = "none";
         callback(false);
+    };
+}
+
+
+function mostrarConfirmacionConMotivo(titulo, mensaje, callback) {
+    const modal = document.getElementById("confirmacionSistema");
+    const tituloEl = document.getElementById("confirmacionTitulo");
+    const mensajeEl = document.getElementById("confirmacionMensaje");
+    const motivoContainer = document.getElementById("confirmacionMotivoContainer");
+    const motivoTextarea = document.getElementById("confirmacionMotivo");
+    const motivoError = document.getElementById("confirmacionMotivoError");
+
+    tituloEl.textContent = titulo;
+    mensajeEl.textContent = mensaje;
+
+    if (motivoContainer) {
+        motivoContainer.style.display = "block";
+    }
+    if (motivoTextarea) {
+        motivoTextarea.value = "";
+    }
+    if (motivoError) {
+        motivoError.style.display = "none";
+        motivoError.textContent = "";
+    }
+
+    modal.style.display = "flex";
+
+    document.getElementById("btnConfirmar").onclick = () => {
+        let motivo = "";
+        if (motivoTextarea) {
+            motivo = motivoTextarea.value.trim();
+            if (motivo.length < 10) {
+                if (motivoError) {
+                    motivoError.textContent = "El motivo debe tener al menos 10 caracteres.";
+                    motivoError.style.display = "block";
+                }
+                return;
+            }
+        }
+        modal.style.display = "none";
+        callback(true, motivo);
+    };
+
+    document.getElementById("btnCancelar").onclick = () => {
+        modal.style.display = "none";
+        callback(false, "");
     };
 }

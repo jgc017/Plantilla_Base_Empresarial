@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plantilla_Base.Models.Administracion
@@ -17,6 +17,12 @@ namespace Plantilla_Base.Models.Administracion
         // Baja logica de la asignacion.
         public short Vigente { get; set; } = 1;
 
+                [StringLength(4000)]
+        public string? Motivo_Actualiza { get; set; }
+
+        [StringLength(4000)]
+        public string? Motivo_Elimina { get; set; }
+
         // Auditoria de creacion.
         public int? Id_Usuario_Creacion { get; set; }
         public DateTime Fecha_Creacion { get; set; }
@@ -33,3 +39,4 @@ namespace Plantilla_Base.Models.Administracion
     }
 
 }
+

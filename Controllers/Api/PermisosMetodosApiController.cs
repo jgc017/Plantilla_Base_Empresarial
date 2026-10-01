@@ -68,9 +68,9 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/PermisosMetodosApi/P_DeletePermisoMetodo/{id_Permiso}
         [HttpDelete("P_DeletePermisoMetodo/{id_Permiso}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeletePermisoMetodo(int id_Permiso)
+        public async Task<IActionResult> P_DeletePermisoMetodo(int id_Permiso, [FromQuery] string motivo)
         {
-            var result = await _permisosMetodos.P_DeletePermisoMetodo(id_Permiso, GetAuditContext());
+            var result = await _permisosMetodos.P_DeletePermisoMetodo(id_Permiso, motivo, GetAuditContext());
             await AuditarOperacion(result, "VwPermisos", "P_DeletePermisoMetodo");
             return ApiResponse(result);
         }
@@ -112,3 +112,4 @@ namespace Plantilla_Base.Controllers.Api
         }
     }
 }
+

@@ -10,3 +10,4 @@ namespace Plantilla_Base.Business.Interfaces.SistemaConfig
         Task<ServiceResult> P_UdpSistemaVisualConfig(DtoSistemaVisualConfigUpdateRequest model, AuditContext audit);
     }
 }
+

@@ -31,6 +31,11 @@ namespace Plantilla_Base.Controllers
         public const string RoleIdClaimType = "Id_Rol";
         public const string MustChangePasswordClaimType = "Debe_Cambiar_Password";
 
+        private const string MensajeSinUsuarios = "No hay usuarios registrados, registre el primer usuario.";
+        private const string MensajeUsuarioNoRegistrado = "Este usuario no se encuentra registrado.";
+        private const string MensajePasswordIncorrecta = "Contraseña incorrecta.";
+        private const string MensajeSesionExpirada = "La sesion del formulario expiro o la pagina estaba desactualizada. Intenta nuevamente.";
+
         private readonly AppDbContext _context;
         private readonly IEmailSender _emailSender;
         private readonly IGeneral _general;
@@ -58,14 +63,21 @@ namespace Plantilla_Base.Controllers
         // redirige al destino solicitado o al Home.
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> Login(string? returnUrl = null)
+        public async Task<IActionResult> Login(string? returnUrl = null, string? mensaje = null)
         {
             if (User.Identity?.IsAuthenticated == true)
             {
                 return RedirectToLocal(returnUrl);
             }
 
-            ViewBag.PermiteRegistroInicial = !await _usuarios.ExistenUsuarios();
+            var existenUsuarios = await _usuarios.ExistenUsuarios();
+            var permiteRegistroInicial = !existenUsuarios;
+            ViewBag.PermiteRegistroInicial = permiteRegistroInicial;
+            ViewBag.LoginMensaje = permiteRegistroInicial
+                ? MensajeSinUsuarios
+                : mensaje == "sesion-expirada"
+                    ? MensajeSesionExpirada
+                    : null;
             return View("VwLogin", new DtoLoginViewModel { ReturnUrl = returnUrl });
         }
 
@@ -73,13 +85,14 @@ namespace Plantilla_Base.Controllers
         // Permite crear el primer usuario unicamente cuando la tabla Usuarios esta vacia.
         [AllowAnonymous]
         [HttpGet]
-        public async Task<IActionResult> RegistroInicial()
+        public async Task<IActionResult> RegistroInicial(string? mensaje = null)
         {
             if (await _usuarios.ExistenUsuarios())
             {
                 return RedirectToAction(nameof(Login));
             }
 
+            ViewBag.LoginMensaje = mensaje == "sesion-expirada" ? MensajeSesionExpirada : null;
             return View("VwInitialRegister", new DtoInitialRegisterViewModel());
         }
 
@@ -140,9 +153,22 @@ namespace Plantilla_Base.Controllers
         [EnableRateLimiting("auth")]
         public async Task<IActionResult> Login(DtoLoginViewModel model)
         {
+            var existenUsuarios = await _usuarios.ExistenUsuarios();
+            ViewBag.PermiteRegistroInicial = !existenUsuarios;
+
             if (!ModelState.IsValid)
             {
-                ViewBag.PermiteRegistroInicial = !await _usuarios.ExistenUsuarios();
+                if (!existenUsuarios)
+                {
+                    ModelState.AddModelError(string.Empty, MensajeSinUsuarios);
+                }
+
+                return View("VwLogin", model);
+            }
+
+            if (!existenUsuarios)
+            {
+                ModelState.AddModelError(string.Empty, MensajeSinUsuarios);
                 return View("VwLogin", model);
             }
 
@@ -157,8 +183,7 @@ namespace Plantilla_Base.Controllers
             if (usuario == null || !BCrypt.Net.BCrypt.Verify(model.Password, usuario.Password))
             {
                 _logger.LogWarning("Intento de login fallido para {Usuario}", model.Usuario);
-                ModelState.AddModelError(string.Empty, "Usuario o contrasena incorrectos.");
-                ViewBag.PermiteRegistroInicial = !await _usuarios.ExistenUsuarios();
+                ModelState.AddModelError(string.Empty, "Usuario o contraseña incorrectos.");
                 return View("VwLogin", model);
             }
 

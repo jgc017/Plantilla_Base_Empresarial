@@ -12,6 +12,7 @@ namespace Plantilla_Base.Business.Interfaces.Dominios
         ServiceResult F_GetDominiosList();
         Task<ServiceResult> F_GetDominio(int idDominio);
         Task<ServiceResult> P_UdpDominio(int idDominio, DtoDominioUpdateRequest model, AuditContext audit);
-        Task<ServiceResult> P_DeleteDominio(int idDominio, AuditContext audit);
+        Task<ServiceResult> P_DeleteDominio(int idDominio, string motivoElimina, AuditContext audit);
     }
 }
+

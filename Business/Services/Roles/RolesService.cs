@@ -123,6 +123,7 @@ namespace Plantilla_Base.Business.Services.Roles
 
             rol.Rol = nombreRol;
             rol.Vigente = model.Vigente;
+            rol.Motivo_Actualiza = model.Motivo_Actualiza;
             rol.Id_Usuario_Modifica = audit.UserId;
             rol.Fecha_Modifica = DateTime.UtcNow;
             rol.Maquina_Modifica = audit.Machine;
@@ -143,8 +144,13 @@ namespace Plantilla_Base.Business.Services.Roles
         }
 
         // P_DeleteRol: realiza baja logica marcando Vigente = 0.
-        public async Task<ServiceResult> P_DeleteRol(int idRol, AuditContext audit)
+        public async Task<ServiceResult> P_DeleteRol(int idRol, string motivoElimina, AuditContext audit)
         {
+            if (string.IsNullOrWhiteSpace(motivoElimina))
+            {
+                return ServiceResult.Fail(StatusCodes.Status400BadRequest, "El motivo de eliminación es obligatorio.");
+            }
+
             try
             {
                 var rol = await _context.Roles.FirstOrDefaultAsync(r => r.Id_Rol == idRol);
@@ -161,6 +167,7 @@ namespace Plantilla_Base.Business.Services.Roles
                 }
 
                 rol.Vigente = 0;
+                rol.Motivo_Elimina = motivoElimina.Trim();
                 rol.Id_Usuario_Modifica = audit.UserId;
                 rol.Fecha_Modifica = DateTime.UtcNow;
                 rol.Maquina_Modifica = audit.Machine;

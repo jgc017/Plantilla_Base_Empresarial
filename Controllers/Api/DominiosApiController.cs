@@ -92,9 +92,9 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/DominiosApi/P_DeleteDominio/{id}
         [HttpDelete("P_DeleteDominio/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeleteDominio(int id)
+        public async Task<IActionResult> P_DeleteDominio(int id, [FromQuery] string motivo)
         {
-            var result = await _dominios.P_DeleteDominio(id, GetAuditContext());
+            var result = await _dominios.P_DeleteDominio(id, motivo, GetAuditContext());
             await AuditarOperacion(result, "VwDominios", "P_DeleteDominio");
             return ApiResponse(result);
         }
@@ -139,3 +139,4 @@ namespace Plantilla_Base.Controllers.Api
         }
     }
 }
+

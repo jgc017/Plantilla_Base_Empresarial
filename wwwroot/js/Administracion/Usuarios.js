@@ -455,8 +455,10 @@ function P_UdpUsuarioRoles() {
         (confirmado) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/RolesUserApi/asignar/${idUsuario}`, {
-                method: "PUT",
+            mostrarConfirmacionConMotivo("Confirmar actualizacion", "Indique el motivo de esta actualizacion (Min. 10 caracteres).", (confirmado, motivo) => {
+        if (!confirmado) return;
+        usuarioActualizado.Motivo_Actualiza = motivo;
+        secureFetch(`/api/RolesUserApi/asignar/${idUsuario}`, { method: "PUT",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({ roleIds: rolesSeleccionados })
             })
@@ -512,8 +514,7 @@ function P_UdpUsuario() {
     secureFetch(`/api/UsuariosApi/P_UdpUsuario/${Id_Usuario}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(usuarioActualizado)
-    })
+        body: JSON.stringify(usuarioActualizado) })
         .then(parseJsonResponse)
         .then(data => {
             if (!data) return;
@@ -529,6 +530,7 @@ function P_UdpUsuario() {
         .catch(() => {
             mostrarAlerta("advertencia", "Error inesperado", "No se pudo guardar el usuario.");
         });
+    });
 }
 
 // P_RestaurarContrasenaSolicitud: atiende la solicitud manual y deja una
@@ -604,15 +606,12 @@ function P_RestaurarContrasenaSolicitud() {
 function P_DeleteUsuario(Id_Usuario) {
     document.querySelectorAll(".table-menu").forEach(m => m.style.display = "none");
 
-    mostrarConfirmacion(
-        "Eliminar usuario?",
+    mostrarConfirmacionConMotivo("Eliminar usuario?",
         "Esta accion marcara el usuario como inactivo.",
-        (confirmado) => {
+        (confirmado, motivo) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/UsuariosApi/P_DeleteUsuario/${Id_Usuario}`, {
-                method: "DELETE"
-            })
+            secureFetch(`/api/UsuariosApi/P_DeleteUsuario/${Id_Usuario}` + "?motivo=" + encodeURIComponent(motivo), { method: "DELETE" })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;

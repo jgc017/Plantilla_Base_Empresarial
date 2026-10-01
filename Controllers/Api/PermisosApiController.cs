@@ -74,9 +74,9 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/PermisosApi/P_DeletePermiso/{id_Permiso}
         [HttpDelete("P_DeletePermiso/{id_Permiso}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeletePermiso(int id_Permiso)
+        public async Task<IActionResult> P_DeletePermiso(int id_Permiso, [FromQuery] string motivo)
         {
-            var result = await _permisos.P_DeletePermiso(id_Permiso, GetAuditContext());
+            var result = await _permisos.P_DeletePermiso(id_Permiso, motivo, GetAuditContext());
             await AuditarOperacion(result, "Permisos", "P_DeletePermiso");
             return ApiResponse(result);
         }
@@ -131,9 +131,9 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/PermisosApi/P_DeletePermisoRol/{id_Permiso}/{id_Rol}
         [HttpDelete("P_DeletePermisoRol/{id_Permiso}/{id_Rol}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeletePermisoRol(int id_Permiso, int id_Rol)
+        public async Task<IActionResult> P_DeletePermisoRol(int id_Permiso, int id_Rol, [FromQuery] string motivo)
         {
-            var result = await _permisos.P_DeletePermisoRol(id_Permiso, id_Rol, GetAuditContext());
+            var result = await _permisos.P_DeletePermisoRol(id_Permiso, id_Rol, motivo, GetAuditContext());
             await AuditarOperacion(result, "VwPermisos", "P_DeletePermisoRol");
             return ApiResponse(result);
         }
@@ -175,3 +175,7 @@ namespace Plantilla_Base.Controllers.Api
         }
     }
 }
+
+
+
+

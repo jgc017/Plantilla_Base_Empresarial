@@ -41,11 +41,11 @@ namespace Plantilla_Base.Business.Services.Usuarios
         public async Task<ServiceResult> P_InsUsuario(DtoUsuarioCreateRequest model, AuditContext audit, bool esRegistroInicial, string? loginUrl)
         {
             var identificacion = model.Identificacion.Trim();
-            var nombre = model.Nombre.Trim();
+            var nombreRaw = model.Nombre.Trim().ToLowerInvariant();
+            var nombre = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombreRaw);
             var telefono = model.Telefono?.Trim();
-            var nombreUsuario = model.Usuario.Trim();
+            var nombreUsuario = model.Usuario.Trim().ToLowerInvariant();
             var email = model.E_Mail.Trim().ToLowerInvariant();
-            var usuarioNormalizado = nombreUsuario.ToLowerInvariant();
             var passwordFueGenerada = string.IsNullOrWhiteSpace(model.Password);
             var passwordPlano = passwordFueGenerada
                 ? GenerarPasswordTemporal()
@@ -58,7 +58,7 @@ namespace Plantilla_Base.Business.Services.Usuarios
 
             var existe = await _context.Usuarios
                 .AnyAsync(u => u.Identificacion == identificacion ||
-                               u.Usuario.ToLower() == usuarioNormalizado ||
+                               u.Usuario.ToLower() == nombreUsuario ||
                                u.E_Mail == email);
 
             if (existe)
@@ -238,16 +238,15 @@ namespace Plantilla_Base.Business.Services.Usuarios
                 return ServiceResult.Fail(StatusCodes.Status400BadRequest, "No puedes desactivar tu propio usuario.");
             }
 
-            var nombreUsuario = model.Usuario.Trim();
+            var nombreUsuario = model.Usuario.Trim().ToLowerInvariant();
             var email = model.E_Mail.Trim().ToLowerInvariant();
-            var usuarioNormalizado = nombreUsuario.ToLowerInvariant();
             var identificacion = model.Identificacion.Trim();
             var motivo = model.Motivo_Actualiza.Trim();
 
             var duplicado = await _context.Usuarios
                 .AnyAsync(x => x.Id_Usuario != idUsuario &&
                     (x.Identificacion == identificacion ||
-                     x.Usuario.ToLower() == usuarioNormalizado ||
+                     x.Usuario.ToLower() == nombreUsuario ||
                      x.E_Mail == email));
 
             if (duplicado)
@@ -255,12 +254,16 @@ namespace Plantilla_Base.Business.Services.Usuarios
                 return ServiceResult.Fail(StatusCodes.Status409Conflict, "La identificacion, usuario o email ya existe");
             }
 
+            var nombreRaw = model.Nombre.Trim().ToLowerInvariant();
+            var nombre = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(nombreRaw);
+
             usuario.Identificacion = identificacion;
-            usuario.Nombre = model.Nombre.Trim();
+            usuario.Nombre = nombre;
             usuario.Telefono = model.Telefono?.Trim();
             usuario.Usuario = nombreUsuario;
             usuario.E_Mail = email;
             usuario.Vigente = model.Vigente;
+                usuario.Motivo_Actualiza = model.Motivo_Actualiza;
             usuario.Motivo_Actualiza = motivo;
             usuario.Id_Usuario_Modifica = audit.UserId;
             usuario.Fecha_Modifica = DateTime.UtcNow;
@@ -368,7 +371,7 @@ namespace Plantilla_Base.Business.Services.Usuarios
         }
 
         // P_DeleteUsuario: realiza baja logica y evita que el usuario actual se elimine a si mismo.
-        public async Task<ServiceResult> P_DeleteUsuario(int idUsuario, AuditContext audit)
+        public async Task<ServiceResult> P_DeleteUsuario(int idUsuario, string motivoElimina, AuditContext audit)
         {
             try
             {
@@ -391,6 +394,7 @@ namespace Plantilla_Base.Business.Services.Usuarios
                 }
 
                 usuario.Vigente = 0;
+                usuario.Motivo_Elimina = motivoElimina.Trim();
                 usuario.Id_Usuario_Modifica = audit.UserId;
                 usuario.Fecha_Modifica = DateTime.UtcNow;
                 usuario.Maquina_Modifica = audit.Machine;
@@ -463,3 +467,4 @@ namespace Plantilla_Base.Business.Services.Usuarios
         }
     }
 }
+

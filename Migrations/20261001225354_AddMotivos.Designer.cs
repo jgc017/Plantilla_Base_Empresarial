@@ -12,8 +12,8 @@ using Plantilla_Base.Data;
 namespace Plantilla_Base.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260719145218_AgregaDebeCambiarPasswordUsuarios")]
-    partial class AgregaDebeCambiarPasswordUsuarios
+    [Migration("20261001225354_AddMotivos")]
+    partial class AddMotivos
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -73,8 +73,8 @@ namespace Plantilla_Base.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id_Auditoria"));
 
                     b.Property<string>("Descripcion")
-                        .HasMaxLength(500)
-                        .HasColumnType("character varying(500)");
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<DateTime>("Fecha_Creacion")
                         .HasColumnType("timestamp with time zone");
@@ -155,6 +155,14 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<string>("Observacion")
                         .HasMaxLength(300)
                         .HasColumnType("character varying(300)");
@@ -167,6 +175,85 @@ namespace Plantilla_Base.Migrations
                     b.HasIndex("Id_Padre");
 
                     b.ToTable("Dominios");
+                });
+
+            modelBuilder.Entity("Plantilla_Base.Models.Administracion.InicioContenido", b =>
+                {
+                    b.Property<int>("Id_InicioContenido")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id_InicioContenido"));
+
+                    b.Property<string>("Contenido")
+                        .HasColumnType("text");
+
+                    b.Property<string>("EnlaceUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("Fecha_Creacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Fecha_Modifica")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Id_Usuario_Creacion")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Id_Usuario_Modifica")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("ImagenUrl")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Maquina_Creacion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Maquina_Modifica")
+                        .HasColumnType("text");
+
+                    b.Property<short>("MostrarEnInicio")
+                        .HasColumnType("smallint");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<int>("Orden")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Resumen")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("TextoBoton")
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<string>("TipoContenido")
+                        .IsRequired()
+                        .HasMaxLength(40)
+                        .HasColumnType("character varying(40)");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<short>("Vigente")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id_InicioContenido");
+
+                    b.HasIndex("TipoContenido", "Orden");
+
+                    b.ToTable("InicioContenidos");
                 });
 
             modelBuilder.Entity("Plantilla_Base.Models.Administracion.Menus", b =>
@@ -211,6 +298,14 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<int>("Posicion")
                         .HasColumnType("integer");
 
@@ -247,6 +342,14 @@ namespace Plantilla_Base.Migrations
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
 
+                    b.Property<string>("CodigoPermiso")
+                        .HasMaxLength(300)
+                        .HasColumnType("character varying(300)");
+
+                    b.Property<string>("Controlador")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
                     b.Property<string>("Descripcion")
                         .HasMaxLength(200)
                         .HasColumnType("character varying(200)");
@@ -256,6 +359,10 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<DateTime?>("Fecha_Modifica")
                         .HasColumnType("timestamp with time zone");
+
+                    b.Property<string>("HttpMetodo")
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)");
 
                     b.Property<int?>("Id_Menu")
                         .HasColumnType("integer");
@@ -272,21 +379,44 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Metodo")
+                        .HasMaxLength(120)
+                        .HasColumnType("character varying(120)");
+
                     b.Property<string>("Modulo")
                         .IsRequired()
                         .HasMaxLength(80)
                         .HasColumnType("character varying(80)");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("TipoPermiso")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(20)
+                        .HasColumnType("character varying(20)")
+                        .HasDefaultValue("Menu");
 
                     b.Property<short>("Vigente")
                         .HasColumnType("smallint");
 
                     b.HasKey("Id_Permiso");
 
-                    b.HasIndex("Id_Menu", "Accion")
-                        .IsUnique();
+                    b.HasIndex("CodigoPermiso")
+                        .IsUnique()
+                        .HasFilter("\"CodigoPermiso\" IS NOT NULL");
 
-                    b.HasIndex("Modulo", "Accion")
-                        .IsUnique();
+                    b.HasIndex("Id_Menu");
+
+                    b.HasIndex("TipoPermiso", "Id_Menu", "Accion")
+                        .IsUnique()
+                        .HasFilter("\"Id_Menu\" IS NOT NULL AND \"TipoPermiso\" = 'Menu'");
 
                     b.ToTable("Permisos");
                 });
@@ -316,6 +446,14 @@ namespace Plantilla_Base.Migrations
 
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<string>("Rol")
                         .IsRequired()
@@ -365,6 +503,14 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<short>("Vigente")
                         .HasColumnType("smallint");
 
@@ -410,6 +556,14 @@ namespace Plantilla_Base.Migrations
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
 
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
                     b.Property<short>("Vigente")
                         .HasColumnType("smallint");
 
@@ -421,6 +575,134 @@ namespace Plantilla_Base.Migrations
                         .IsUnique();
 
                     b.ToTable("Roles_User");
+                });
+
+            modelBuilder.Entity("Plantilla_Base.Models.Administracion.SistemaVisualConfig", b =>
+                {
+                    b.Property<int>("Id_SistemaVisualConfig")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id_SistemaVisualConfig"));
+
+                    b.Property<string>("FaviconUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<DateTime>("Fecha_Creacion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime?>("Fecha_Modifica")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int?>("Id_Usuario_Creacion")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Id_Usuario_Modifica")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("LoginBackgroundUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("LogoUrl")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<string>("Maquina_Creacion")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Maquina_Modifica")
+                        .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<short>("Vigente")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id_SistemaVisualConfig");
+
+                    b.ToTable("SistemaVisualConfig");
+                });
+
+            modelBuilder.Entity("Plantilla_Base.Models.Administracion.SolicitudRestaurarContrasena", b =>
+                {
+                    b.Property<int>("Id_Solicitud_Restaura")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer");
+
+                    NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id_Solicitud_Restaura"));
+
+                    b.Property<string>("Email_Solicitud")
+                        .IsRequired()
+                        .HasMaxLength(160)
+                        .HasColumnType("character varying(160)");
+
+                    b.Property<string>("Estado")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<DateTime?>("Fecha_Atencion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Fecha_Expiracion")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<DateTime>("Fecha_Solicitud")
+                        .HasColumnType("timestamp with time zone");
+
+                    b.Property<int>("Id_Usuario")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("Id_Usuario_Atiende")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("Identificacion_Solicitud")
+                        .IsRequired()
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
+                    b.Property<string>("Ip_Atencion")
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<string>("Ip_Solicitud")
+                        .HasMaxLength(80)
+                        .HasColumnType("character varying(80)");
+
+                    b.Property<string>("Motivo_Atencion")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Solicitud")
+                        .IsRequired()
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("UserAgent_Solicitud")
+                        .HasMaxLength(500)
+                        .HasColumnType("character varying(500)");
+
+                    b.Property<short>("Vigente")
+                        .HasColumnType("smallint");
+
+                    b.HasKey("Id_Solicitud_Restaura");
+
+                    b.HasIndex("Id_Usuario_Atiende");
+
+                    b.HasIndex("Id_Usuario", "Estado", "Vigente");
+
+                    b.ToTable("Solicitud_Restaurar_Contrasena", (string)null);
                 });
 
             modelBuilder.Entity("Plantilla_Base.Models.Administracion.Usuarios", b =>
@@ -452,11 +734,23 @@ namespace Plantilla_Base.Migrations
                     b.Property<int?>("Id_Usuario_Modifica")
                         .HasColumnType("integer");
 
+                    b.Property<string>("Identificacion")
+                        .HasMaxLength(30)
+                        .HasColumnType("character varying(30)");
+
                     b.Property<string>("Maquina_Creacion")
                         .HasColumnType("text");
 
                     b.Property<string>("Maquina_Modifica")
                         .HasColumnType("text");
+
+                    b.Property<string>("Motivo_Actualiza")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
+
+                    b.Property<string>("Motivo_Elimina")
+                        .HasMaxLength(4000)
+                        .HasColumnType("character varying(4000)");
 
                     b.Property<string>("Nombre")
                         .IsRequired()
@@ -484,6 +778,10 @@ namespace Plantilla_Base.Migrations
 
                     b.HasIndex("E_Mail")
                         .IsUnique();
+
+                    b.HasIndex("Identificacion")
+                        .IsUnique()
+                        .HasFilter("\"Identificacion\" IS NOT NULL");
 
                     b.HasIndex("Usuario")
                         .IsUnique();
@@ -583,6 +881,24 @@ namespace Plantilla_Base.Migrations
                     b.Navigation("Rol");
 
                     b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Plantilla_Base.Models.Administracion.SolicitudRestaurarContrasena", b =>
+                {
+                    b.HasOne("Plantilla_Base.Models.Administracion.Usuarios", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("Id_Usuario")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("Plantilla_Base.Models.Administracion.Usuarios", "UsuarioAtiende")
+                        .WithMany()
+                        .HasForeignKey("Id_Usuario_Atiende")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.Navigation("Usuario");
+
+                    b.Navigation("UsuarioAtiende");
                 });
 #pragma warning restore 612, 618
         }

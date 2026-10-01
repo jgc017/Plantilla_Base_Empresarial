@@ -86,11 +86,12 @@ function P_UdpSistemaVisualConfig() {
                     const payload = obtenerPayloadSistemaConfig();
                     if (!payload) return null;
 
-                    return secureFetch("/api/SistemaConfigApi/P_UdpSistemaVisualConfig", {
-                        method: "PUT",
+                    return mostrarConfirmacionConMotivo("Confirmar actualizacion", "Indique el motivo de esta actualizacion (Min. 10 caracteres).", (confirmado, motivo) => {
+        if (!confirmado) return;
+        payload.Motivo_Actualiza = motivo;
+        secureFetch("/api/SistemaConfigApi/P_UdpSistemaVisualConfig", { method: "PUT",
                         headers: { "Content-Type": "application/json" },
-                        body: JSON.stringify(payload)
-                    });
+                        body: JSON.stringify(payload) });
                 })
                 .then(response => response ? parseJsonResponse(response) : null)
                 .then(data => {
@@ -107,6 +108,7 @@ function P_UdpSistemaVisualConfig() {
                 .catch(() => mostrarAlerta("advertencia", "Error inesperado", "No se pudo guardar la configuracion."));
         }
     );
+    });
 }
 
 // P_UploadImagenSistema: sube la imagen seleccionada y asigna la ruta devuelta al input correspondiente.

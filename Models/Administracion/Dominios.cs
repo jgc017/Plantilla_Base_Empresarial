@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plantilla_Base.Models.Administracion
@@ -28,6 +28,13 @@ namespace Plantilla_Base.Models.Administracion
 
         // Baja logica: 1 activo, 0 inactivo.
         public short Vigente { get; set; } = 1;
+
+        // Motivos de cambios y eliminacion
+        [StringLength(4000)]
+        public string? Motivo_Actualiza { get; set; }
+
+        [StringLength(4000)]
+        public string? Motivo_Elimina { get; set; }
 
         // Auditoria de creacion.
         public int? Id_Usuario_Crea { get; set; }

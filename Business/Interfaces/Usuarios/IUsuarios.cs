@@ -14,6 +14,7 @@ namespace Plantilla_Base.Business.Interfaces.Usuarios
         Task<ServiceResult> F_GetUsuarioIdentificacion(string identificacion);
         Task<ServiceResult> P_UdpUsuario(int idUsuario, DtoUsuarioUpdateRequest model, AuditContext audit);
         Task<ServiceResult> P_RestaurarContrasenaSolicitud(int idUsuario, DtoUsuarioRestorePasswordRequest model, AuditContext audit, string? loginUrl);
-        Task<ServiceResult> P_DeleteUsuario(int idUsuario, AuditContext audit);
+        Task<ServiceResult> P_DeleteUsuario(int idUsuario, string motivoElimina, AuditContext audit);
     }
 }
+

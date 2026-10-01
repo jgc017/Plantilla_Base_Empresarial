@@ -40,6 +40,9 @@ namespace Plantilla_Base.Models.Dto.Administracion.Permisos
 
         [Range(0, 1)]
         public short Vigente { get; set; } = 1;
+        [Required(ErrorMessage = "El motivo de actualización es obligatorio")]
+        [StringLength(4000, MinimumLength = 10, ErrorMessage = "El motivo debe tener al menos 10 caracteres")]
+        public string Motivo_Actualiza { get; set; } = string.Empty;
     }
 
     // DTO recibido por POST /api/PermisosApi/P_InsPermisoRol/{id}.
@@ -56,6 +59,9 @@ namespace Plantilla_Base.Models.Dto.Administracion.Permisos
     {
         [Required(ErrorMessage = "La lista de roles es obligatoria")]
         public List<DtoPermisoRolBulkItem> Roles { get; set; } = new();
+        [Required(ErrorMessage = "El motivo de actualización es obligatorio")]
+        [StringLength(4000, MinimumLength = 10, ErrorMessage = "El motivo debe tener al menos 10 caracteres")]
+        public string Motivo_Actualiza { get; set; } = string.Empty;
     }
 
     // Item usado por el guardado masivo de roles por permiso.
@@ -86,3 +92,4 @@ namespace Plantilla_Base.Models.Dto.Administracion.Permisos
         public bool Asignado { get; set; }
     }
 }
+

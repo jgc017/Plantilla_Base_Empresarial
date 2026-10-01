@@ -76,9 +76,9 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/RolesApi/P_DeleteRol/{id}
         [HttpDelete("P_DeleteRol/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeleteRol(int id)
+        public async Task<IActionResult> P_DeleteRol(int id, [FromQuery] string motivo)
         {
-            var result = await _roles.P_DeleteRol(id, GetAuditContext());
+            var result = await _roles.P_DeleteRol(id, motivo, GetAuditContext());
             await AuditarOperacion(result, "Roles", "P_DeleteRol");
             return ApiResponse(result);
         }

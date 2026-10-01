@@ -121,9 +121,9 @@ namespace Plantilla_Base.Controllers.Api
         // DELETE: /api/UsuariosApi/P_DeleteUsuario/{id}
         [HttpDelete("P_DeleteUsuario/{id}")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> P_DeleteUsuario(int id)
+        public async Task<IActionResult> P_DeleteUsuario(int id, [FromQuery] string motivo)
         {
-            var result = await _usuarios.P_DeleteUsuario(id, GetAuditContext());
+            var result = await _usuarios.P_DeleteUsuario(id, motivo, GetAuditContext());
             await AuditarOperacion(result, "VwUsuarios", "P_DeleteUsuario");
             return ApiResponse(result);
         }
@@ -165,3 +165,4 @@ namespace Plantilla_Base.Controllers.Api
         }
     }
 }
+

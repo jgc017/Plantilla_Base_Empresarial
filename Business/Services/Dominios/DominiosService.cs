@@ -182,6 +182,7 @@ namespace Plantilla_Base.Business.Services.Dominios
             dominio.Descripcion = descripcion;
             dominio.DominioPadre = dominioPadre;
             dominio.Vigente = model.Vigente;
+            dominio.Motivo_Actualiza = model.Motivo_Actualiza;
             dominio.Id_Usuario_Modifica = audit.UserId;
             dominio.Fecha_Modifica = DateTime.UtcNow;
             dominio.Maquina_Modifica = audit.Machine;
@@ -202,11 +203,12 @@ namespace Plantilla_Base.Business.Services.Dominios
         }
 
         // P_DeleteDominio: realiza baja logica marcando Vigente = 0.
-        public async Task<ServiceResult> P_DeleteDominio(int idDominio, AuditContext audit)
+        public async Task<ServiceResult> P_DeleteDominio(int idDominio, string motivoElimina, AuditContext audit)
         {
+            if (string.IsNullOrWhiteSpace(motivoElimina)) return ServiceResult.Fail(StatusCodes.Status400BadRequest, "El motivo de eliminación es obligatorio.");
             try
             {
-                var dominio = await _context.Dominios.FirstOrDefaultAsync(d => d.Id_Dominio == idDominio);
+            var dominio = await _context.Dominios.FirstOrDefaultAsync(d => d.Id_Dominio == idDominio);
                 if (dominio == null)
                 {
                     return ServiceResult.Fail(StatusCodes.Status404NotFound, "El dominio no existe.");
@@ -220,6 +222,7 @@ namespace Plantilla_Base.Business.Services.Dominios
                 }
 
                 dominio.Vigente = 0;
+                dominio.Motivo_Elimina = motivoElimina.Trim();
                 dominio.Id_Usuario_Modifica = audit.UserId;
                 dominio.Fecha_Modifica = DateTime.UtcNow;
                 dominio.Maquina_Modifica = audit.Machine;
@@ -248,3 +251,5 @@ namespace Plantilla_Base.Business.Services.Dominios
         }
     }
 }
+
+

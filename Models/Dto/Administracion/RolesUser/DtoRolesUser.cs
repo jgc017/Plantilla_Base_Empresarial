@@ -11,3 +11,4 @@ namespace Plantilla_Base.Models.Dto.Administracion.RolesUser
         public List<int> RoleIds { get; set; } = [];
     }
 }
+

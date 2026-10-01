@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
 using Plantilla_Base.Models.Account;
 using Plantilla_Base.Models.Administracion;
 using System.Reflection.Emit;
@@ -103,7 +103,7 @@ namespace Plantilla_Base.Data
             {
                 entity.HasIndex(p => new { p.TipoPermiso, p.Id_Menu, p.Accion })
                     .IsUnique()
-                    .HasFilter("\"Id_Menu\" IS NOT NULL");
+                    .HasFilter("\"Id_Menu\" IS NOT NULL AND \"TipoPermiso\" = 'Menu'");
                 entity.HasIndex(p => p.CodigoPermiso)
                     .IsUnique()
                     .HasFilter("\"CodigoPermiso\" IS NOT NULL");

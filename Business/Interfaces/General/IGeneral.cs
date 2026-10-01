@@ -18,3 +18,4 @@ namespace Plantilla_Base.Business.Interfaces.General
         Task RegistrarAuditoria(AuditContext audit, string formulario, string metodoEjecutado, string descripcion);
     }
 }
+

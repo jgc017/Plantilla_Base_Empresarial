@@ -160,14 +160,7 @@ function P_UdpPermisoMetodo() {
     const idPermiso = document.getElementById("Id_Permiso_Metodo").value;
     const descripcion = document.getElementById("DescripcionPermisoMetodo").value.trim();
 
-    secureFetch(`/api/PermisosMetodosApi/P_UdpPermisoMetodo/${idPermiso}`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-            descripcion,
-            vigente: document.getElementById("chkPermisoMetodoVigente").checked ? 1 : 0
-        })
-    })
+    mostrarConfirmacionConMotivo("Confirmar actualizacion", "Indique el motivo de esta actualizacion (Min. 10 caracteres).", (confirmado, motivo) => { if (!confirmado) return; secureFetch(`/api/PermisosMetodosApi/P_UdpPermisoMetodo/${idPermiso}`, { method: "PUT", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ descripcion, vigente: document.getElementById("chkPermisoMetodoVigente").checked ? 1 : 0, Motivo_Actualiza: motivo }) })
         .then(parseJsonResponse)
         .then(data => {
             if (!data) return;
@@ -182,22 +175,19 @@ function P_UdpPermisoMetodo() {
         })
         .catch(() => {
             mostrarAlerta("advertencia", "Error inesperado", "No se pudo guardar el permiso de metodo.");
-        });
+        }); });
 }
 
 // P_DeletePermisoMetodo: confirma e inactiva el permiso y sus asignaciones.
 function P_DeletePermisoMetodo(idPermiso) {
     document.querySelectorAll(".table-menu").forEach(m => m.style.display = "none");
 
-    mostrarConfirmacion(
-        "Eliminar permiso de metodo?",
+    mostrarConfirmacionConMotivo("Eliminar permiso de metodo?",
         "Esta accion inactivara el permiso de metodo y sus asignaciones activas.",
-        (confirmado) => {
+        (confirmado, motivo) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/PermisosMetodosApi/P_DeletePermisoMetodo/${idPermiso}`, {
-                method: "DELETE"
-            })
+            secureFetch(`/api/PermisosMetodosApi/P_DeletePermisoMetodo/${idPermiso}` + "?motivo=" + encodeURIComponent(motivo), { method: "DELETE" })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;
@@ -215,3 +205,4 @@ function P_DeletePermisoMetodo(idPermiso) {
         }
     );
 }
+

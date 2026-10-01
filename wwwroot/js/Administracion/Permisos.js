@@ -455,15 +455,12 @@ function P_UdpPermiso() {
 function P_DeletePermiso(idPermiso) {
     document.querySelectorAll(".table-menu").forEach(m => m.style.display = "none");
 
-    mostrarConfirmacion(
-        "Eliminar permiso?",
+    mostrarConfirmacionConMotivo("Eliminar permiso?",
         "Esta accion inactivara el permiso y sus asignaciones activas.",
-        (confirmado) => {
+        (confirmado, motivo) => {
             if (!confirmado) return;
 
-            secureFetch(`/api/PermisosApi/P_DeletePermiso/${idPermiso}`, {
-                method: "DELETE"
-            })
+            secureFetch(`/api/PermisosApi/P_DeletePermiso/${idPermiso}` + "?motivo=" + encodeURIComponent(motivo), { method: "DELETE" })
                 .then(parseJsonResponse)
                 .then(data => {
                     if (!data) return;
